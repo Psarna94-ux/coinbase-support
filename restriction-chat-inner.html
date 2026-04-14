@@ -82,7 +82,8 @@
       flex-direction: column;
       align-items: center;
       gap: 32px;
-      padding: 10px 24px;
+      padding: 10px 24px 80px;
+      overflow-x: clip;
       overflow-y: auto;
     }
 
@@ -162,6 +163,34 @@
     .chat-meta-icon img { width: 16px; height: 16px; display: block; }
     .chat-meta-text {
       font-family: var(--font-text);
+      font-size: 12px; font-weight: 400; line-height: 16px;
+      color: var(--foreground-muted);
+    }
+
+    /* User Bubble */
+    .user-bubble-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 8px;
+      width: 100%;
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+      scroll-margin-top: 72px;
+    }
+    .user-bubble-wrapper.visible { opacity: 1; transform: translateY(0); }
+
+    .user-bubble {
+      background: #d3e1ff;
+      padding: 8px 16px;
+      border-radius: 12px 12px 0 12px;
+      font-size: 16px; font-weight: 400; line-height: 24px;
+      color: var(--foreground);
+      max-width: 80%;
+    }
+
+    .user-bubble-time {
       font-size: 12px; font-weight: 400; line-height: 16px;
       color: var(--foreground-muted);
     }
@@ -340,6 +369,81 @@
       chat.classList.add('visible');
     }, 4000);
     setTimeout(function() { pills.classList.add('visible'); }, 4600);
+
+    // Handle "Why was my account restricted?" pill click
+    var pillBtns = document.querySelectorAll('.pill-btn');
+    pillBtns[1].addEventListener('click', function() {
+      // Hide pills
+      pills.style.display = 'none';
+
+      var timeStr = getTimeStr();
+      var body = document.querySelector('.body-content');
+
+      // User bubble
+      var bubble = document.createElement('div');
+      bubble.className = 'user-bubble-wrapper';
+      bubble.innerHTML = '<div class="user-bubble">Why was my account restricted?</div><span class="user-bubble-time">' + timeStr + '</span>';
+      body.insertBefore(bubble, pills);
+
+      setTimeout(function() {
+        bubble.classList.add('visible');
+        bubble.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 50);
+
+      // Thinking
+      var thinkingReply = document.createElement('div');
+      thinkingReply.className = 'thinking-indicator';
+      thinkingReply.innerHTML = '<svg class="spinner" viewBox="0 0 15 15" fill="none"><circle cx="7.5" cy="7.5" r="5.5" stroke="#5B616E" stroke-opacity="0.2" stroke-width="2.5"/><path d="M7.5 2C8.94 2 10.28 2.52 11.33 3.39C12.19 4.1 12.8 5.05 13.07 6.12" stroke="#5B616E" stroke-opacity="0.66" stroke-width="2.5" stroke-linecap="round"/></svg><span class="thinking-text">Thinking...</span>';
+
+      setTimeout(function() {
+        body.insertBefore(thinkingReply, pills);
+        setTimeout(function() {
+          thinkingReply.classList.add('visible');
+          thinkingReply.scrollIntoView({ behavior: 'smooth', block: 'end' });
+        }, 50);
+      }, 800);
+
+      // Bot response
+      setTimeout(function() {
+        thinkingReply.classList.remove('visible');
+        setTimeout(function() {
+          thinkingReply.remove();
+
+          var response = document.createElement('div');
+          response.className = 'chat-section';
+          response.style.opacity = '0';
+          response.style.transform = 'translateY(12px)';
+          response.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+          response.innerHTML = ''
+            + '<div class="chat-message">'
+            + '<p>We noticed a login attempt to your account from an unusual device and location.</p>'
+            + '<p>To make sure, that your account has not fall prey to any scammers, we would need you to complete the account review. It will take you less than 5 mins to complete it!</p>'
+            + '</div>'
+            + '<div class="chat-meta">'
+            + '<div class="chat-meta-icon"><img src="coinbase-logo.png" alt="Coinbase" width="16" height="16" /></div>'
+            + '<span class="chat-meta-text">Support · ' + timeStr + '</span>'
+            + '</div>';
+
+          body.insertBefore(response, pills);
+          setTimeout(function() {
+            response.style.opacity = '1';
+            response.style.transform = 'translateY(0)';
+            response.scrollIntoView({ behavior: 'smooth', block: 'end' });
+          }, 50);
+
+          // New action pills
+          var newPills = document.createElement('div');
+          newPills.className = 'action-pills';
+          newPills.innerHTML = '<button class="pill-btn">Start account review</button><button class="pill-btn">Need help with something else</button>';
+          body.insertBefore(newPills, pills);
+
+          setTimeout(function() {
+            newPills.classList.add('visible');
+            newPills.scrollIntoView({ behavior: 'smooth', block: 'end' });
+          }, 500);
+        }, 300);
+      }, 4000);
+    });
   </script>
 </body>
 </html>
