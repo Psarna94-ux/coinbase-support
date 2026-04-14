@@ -98,17 +98,17 @@
     .screen-restriction.fade-out {
       opacity: 0;
       pointer-events: none;
+      transition: none;
     }
 
     .screen-review {
       z-index: 1;
-      opacity: 0;
-      transition: opacity 0.5s ease;
+      visibility: hidden;
     }
 
     .screen-review.active {
       z-index: 2;
-      opacity: 1;
+      visibility: visible;
     }
 
     .screen-overlay {
@@ -190,14 +190,16 @@
         overlay.classList.remove('active');
         chatScreen.classList.remove('active');
       }
-      // "Start account review" from chat -> dismiss sheet, show review screen
+      // "Start account review" from chat -> show review behind, then dismiss sheet
       if (e.data.action === 'start-review') {
-        overlay.classList.remove('active');
-        chatScreen.classList.remove('active');
+        // Instantly swap restriction for review behind the sheet
+        restrictionScreen.classList.add('fade-out');
+        reviewScreen.classList.add('active');
+        // Then dismiss the sheet
         setTimeout(function() {
-          restrictionScreen.classList.add('fade-out');
-          reviewScreen.classList.add('active');
-        }, 400);
+          overlay.classList.remove('active');
+          chatScreen.classList.remove('active');
+        }, 100);
       }
       // Back arrow from review -> go back to restriction
       if (e.data.action === 'navigate-back-to-restriction') {
