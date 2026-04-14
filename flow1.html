@@ -89,6 +89,7 @@
       align-items: center;
       background: var(--background);
       z-index: 100;
+      cursor: none;
     }
     .device-status-bar .time {
       font-family: -apple-system, 'SF Pro Display', sans-serif;
@@ -121,6 +122,18 @@
       height: 100%;
       border: none;
       background: var(--background);
+    }
+
+    /* Invisible overlay to capture mouse events over iframes */
+    .mouse-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 50;
+      cursor: none;
+    }
+
+    .mouse-overlay.clicking {
+      pointer-events: none;
     }
 
     .screen-help {
@@ -161,6 +174,9 @@
       </div>
     </div>
 
+    <!-- Mouse overlay for cursor tracking -->
+    <div class="mouse-overlay" id="mouse-overlay"></div>
+
     <!-- Screens -->
     <div class="screens">
       <iframe id="help-screen" class="screen screen-help" src="help-inner.html?flow=1"></iframe>
@@ -173,16 +189,30 @@
   <script>
     // Custom tap cursor
     var cursor = document.getElementById('tap-cursor');
-    var device = document.querySelector('.device');
+    var overlay = document.getElementById('mouse-overlay');
 
-    device.addEventListener('mouseenter', function() { cursor.style.display = 'block'; });
-    device.addEventListener('mouseleave', function() { cursor.style.display = 'none'; });
-    device.addEventListener('mousemove', function(e) {
+    overlay.addEventListener('mousemove', function(e) {
+      cursor.style.display = 'block';
       cursor.style.left = e.clientX + 'px';
       cursor.style.top = e.clientY + 'px';
     });
-    device.addEventListener('mousedown', function() { cursor.classList.add('active'); });
-    device.addEventListener('mouseup', function() { cursor.classList.remove('active'); });
+
+    overlay.addEventListener('mouseleave', function() {
+      cursor.style.display = 'none';
+    });
+
+    overlay.addEventListener('mousedown', function(e) {
+      cursor.classList.add('active');
+      // Briefly remove overlay so click passes through to iframe
+      overlay.style.pointerEvents = 'none';
+      setTimeout(function() {
+        overlay.style.pointerEvents = 'auto';
+      }, 300);
+    });
+
+    overlay.addEventListener('mouseup', function() {
+      cursor.classList.remove('active');
+    });
 
     var helpScreen = document.getElementById('help-screen');
     var chatScreen = document.getElementById('chat-screen');
