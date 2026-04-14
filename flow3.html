@@ -97,10 +97,9 @@
 
     .screen-overlay {
       position: absolute;
-      top: -44px;
-      left: 0; right: 0; bottom: 0;
+      inset: 0;
       background: rgba(0, 0, 0, 0);
-      z-index: 99;
+      z-index: 101;
       pointer-events: none;
       transition: background 0.4s cubic-bezier(0.2, 0, 0, 1);
     }
@@ -111,7 +110,7 @@
     }
 
     .screen-chat {
-      z-index: 3;
+      z-index: 102;
       top: 10%;
       height: 90%;
       transform: translateY(110%);
@@ -139,9 +138,9 @@
       </div>
     </div>
 
+    <div class="screen-overlay" id="overlay"></div>
     <div class="screens">
       <iframe id="restriction-screen" class="screen screen-restriction" src="restriction-inner.html"></iframe>
-      <div class="screen-overlay" id="overlay"></div>
       <iframe id="chat-screen" class="screen screen-chat" src="restriction-chat-inner.html"></iframe>
     </div>
   </div>
