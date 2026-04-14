@@ -170,12 +170,18 @@
     .action-pills {
       display: flex;
       gap: 8px;
-      flex-wrap: wrap;
-      width: 100%;
+      overflow-x: scroll;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      width: 100vw;
+      margin-left: -24px;
+      padding: 0 24px 12px;
+      align-self: flex-start;
       opacity: 0;
       transform: translateY(12px);
       transition: opacity 0.4s ease, transform 0.4s ease;
     }
+    .action-pills::-webkit-scrollbar { display: none; }
     .action-pills.visible { opacity: 1; transform: translateY(0); }
 
     .pill-btn {
@@ -184,12 +190,13 @@
       border-radius: 1000px;
       padding: 8px 16px;
       font-family: var(--font-sans);
-      font-size: 16px;
+      font-size: 14px;
       font-weight: 500;
-      line-height: 24px;
+      line-height: 20px;
       color: var(--foreground);
       cursor: pointer;
       white-space: nowrap;
+      flex-shrink: 0;
       transition: background 0.15s ease;
     }
     .pill-btn:hover { background: #e2e5e9; }
