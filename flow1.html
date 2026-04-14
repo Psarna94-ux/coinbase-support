@@ -58,6 +58,24 @@
       overflow: hidden;
       position: relative;
       background: #fff;
+      cursor: none;
+    }
+
+    .tap-cursor {
+      position: fixed;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.15);
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      display: none;
+      transition: transform 0.1s ease;
+    }
+
+    .tap-cursor.active {
+      transform: translate(-50%, -50%) scale(0.8);
     }
 
     /* Status bar — fixed at top of device, above both screens */
@@ -150,7 +168,22 @@
     </div>
   </div>
 
+  <div class="tap-cursor" id="tap-cursor"></div>
+
   <script>
+    // Custom tap cursor
+    var cursor = document.getElementById('tap-cursor');
+    var device = document.querySelector('.device');
+
+    device.addEventListener('mouseenter', function() { cursor.style.display = 'block'; });
+    device.addEventListener('mouseleave', function() { cursor.style.display = 'none'; });
+    device.addEventListener('mousemove', function(e) {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top = e.clientY + 'px';
+    });
+    device.addEventListener('mousedown', function() { cursor.classList.add('active'); });
+    device.addEventListener('mouseup', function() { cursor.classList.remove('active'); });
+
     var helpScreen = document.getElementById('help-screen');
     var chatScreen = document.getElementById('chat-screen');
 
