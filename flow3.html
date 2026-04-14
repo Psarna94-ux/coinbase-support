@@ -95,18 +95,27 @@
       transition: transform 0.35s cubic-bezier(0.2, 0, 0, 1), opacity 0.35s cubic-bezier(0.2, 0, 0, 1);
     }
 
-    .screen-chat {
-      z-index: 3;
-      transform: translateY(100%);
-      transition: transform 0.4s cubic-bezier(0.2, 0, 0, 1);
-      border-radius: 16px 16px 0 0;
-      box-shadow: 0 -4px 20px rgba(0,0,0,0.1);
+    .screen-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0);
+      z-index: 2;
+      pointer-events: none;
+      transition: background 0.4s cubic-bezier(0.2, 0, 0, 1);
     }
 
-    .screen-restriction.pushed {
-      transform: scale(0.95);
-      opacity: 0.5;
-      border-radius: 12px;
+    .screen-overlay.active {
+      background: rgba(0, 0, 0, 0.5);
+      pointer-events: auto;
+    }
+
+    .screen-chat {
+      z-index: 3;
+      top: 10%;
+      height: 90%;
+      transform: translateY(110%);
+      transition: transform 0.4s cubic-bezier(0.2, 0, 0, 1);
+      border-radius: 16px 16px 0 0;
     }
 
     .screen-chat.active {
@@ -131,6 +140,7 @@
 
     <div class="screens">
       <iframe id="restriction-screen" class="screen screen-restriction" src="restriction-inner.html"></iframe>
+      <div class="screen-overlay" id="overlay"></div>
       <iframe id="chat-screen" class="screen screen-chat" src="restriction-chat-inner.html"></iframe>
     </div>
   </div>
@@ -149,16 +159,23 @@
 
     var restrictionScreen = document.getElementById('restriction-screen');
     var chatScreen = document.getElementById('chat-screen');
+    var overlay = document.getElementById('overlay');
 
     window.addEventListener('message', function(e) {
       if (e.data.action === 'navigate-to-chat') {
-        restrictionScreen.classList.add('pushed');
+        overlay.classList.add('active');
         chatScreen.classList.add('active');
       }
       if (e.data.action === 'navigate-back') {
-        restrictionScreen.classList.remove('pushed');
+        overlay.classList.remove('active');
         chatScreen.classList.remove('active');
       }
+    });
+
+    // Tap overlay to dismiss
+    overlay.addEventListener('click', function() {
+      overlay.classList.remove('active');
+      chatScreen.classList.remove('active');
     });
   </script>
 </body>
