@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Account Restricted</title>
+  <style>
+    @font-face {
+      font-family: 'Coinbase Sans';
+      src: url('https://raw.githubusercontent.com/rzdude/Coinbase-Fonts/master/Coinbase%20Fonts/woff2/Coinbase%20Sans.woff2') format('woff2');
+      font-weight: 400; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Coinbase Sans';
+      src: url('https://raw.githubusercontent.com/rzdude/Coinbase-Fonts/master/Coinbase%20Fonts/woff2/Coinbase%20Sans%20Medium.woff2') format('woff2');
+      font-weight: 500; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Coinbase Display';
+      src: url('https://raw.githubusercontent.com/rzdude/Coinbase-Fonts/master/Coinbase%20Fonts/woff2/Coinbase%20Display.woff2') format('woff2');
+      font-weight: 400; font-style: normal; font-display: swap;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; scrollbar-width: none; }
+    *::-webkit-scrollbar { display: none; }
+    strong, b { font-weight: 500; }
+
+    :root {
+      --foreground: #0a0b0d;
+      --foreground-muted: #5b616e;
+      --primary: #0052ff;
+      --secondary: #eef0f3;
+      --background: #ffffff;
+      --font-sans: 'Coinbase Sans', -apple-system, sans-serif;
+      --font-display: 'Coinbase Display', -apple-system, sans-serif;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--background);
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Header */
+    .header {
+      height: 56px;
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .close-btn {
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Content */
+    .content {
+      flex: 1;
+      padding: 24px 24px 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .warning-icon {
+      width: 72px;
+      height: 72px;
+      position: relative;
+      margin-bottom: 16px;
+    }
+
+    .warning-triangle {
+      position: absolute;
+      inset: 6.25% 0;
+    }
+
+    .warning-exclaim {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -40%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+    }
+
+    .warning-exclaim .line {
+      width: 3px;
+      height: 18px;
+      background: var(--foreground);
+      border-radius: 1.5px;
+    }
+
+    .warning-exclaim .dot {
+      width: 3px;
+      height: 3px;
+      background: var(--foreground);
+      border-radius: 50%;
+    }
+
+    .title {
+      font-family: var(--font-display);
+      font-size: 28px;
+      font-weight: 400;
+      line-height: 36px;
+      color: var(--foreground);
+      margin-bottom: 8px;
+    }
+
+    .description {
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 24px;
+      color: var(--foreground-muted);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* Buttons */
+    .button-group {
+      padding: 0 24px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .btn-primary {
+      width: 100%;
+      padding: 16px 32px;
+      border-radius: 1000px;
+      background: var(--primary);
+      color: white;
+      font-family: var(--font-sans);
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 24px;
+      border: none;
+      cursor: pointer;
+      text-align: center;
+      transition: opacity 0.15s ease;
+    }
+
+    .btn-primary:hover { opacity: 0.9; }
+    .btn-primary:active { opacity: 0.8; }
+
+    .btn-secondary {
+      width: 100%;
+      padding: 16px 32px;
+      border-radius: 1000px;
+      background: var(--secondary);
+      color: var(--foreground);
+      font-family: var(--font-sans);
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 24px;
+      border: none;
+      cursor: pointer;
+      text-align: center;
+      transition: background 0.15s ease;
+    }
+
+    .btn-secondary:hover { background: #e2e5e9; }
+    .btn-secondary:active { background: #d5d8dd; }
+
+    /* Home Indicator */
+    .home-indicator {
+      height: 32px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding-bottom: 8px;
+      flex-shrink: 0;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <div class="header">
+    <div class="close-btn">
+      <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12.5 3.5L3.5 12.5" stroke="#0a0b0d" stroke-width="1.5" stroke-linecap="round"/>
+        <path d="M3.5 3.5L12.5 12.5" stroke="#0a0b0d" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div class="content">
+    <div class="warning-icon">
+      <svg class="warning-triangle" viewBox="0 0 72 63" fill="none">
+        <path d="M36 0L72 63H0L36 0Z" fill="#FFD200"/>
+      </svg>
+      <div class="warning-exclaim">
+        <div class="line"></div>
+        <div class="dot"></div>
+      </div>
+    </div>
+
+    <h1 class="title">Your account is restricted</h1>
+
+    <div class="description">
+      <p>To protect you against potential loss, we have limited your ability to send crypto.</p>
+      <p>To remove these restriction, complete an account review so we understand more about the way you use crypto.</p>
+    </div>
+  </div>
+
+  <!-- Buttons -->
+  <div class="button-group">
+    <button class="btn-primary">Initiate account review</button>
+    <button class="btn-secondary" id="need-help-btn">Need help?</button>
+  </div>
+
+  <div class="home-indicator"></div>
+
+  <script>
+    document.getElementById('need-help-btn').addEventListener('click', function() {
+      window.parent.postMessage({ action: 'navigate-to-chat' }, '*');
+    });
+  </script>
+</body>
+</html>

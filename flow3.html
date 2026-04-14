@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flow 3 — In-App Support</title>
+  <style>
+    @font-face {
+      font-family: 'Coinbase Sans';
+      src: url('https://raw.githubusercontent.com/rzdude/Coinbase-Fonts/master/Coinbase%20Fonts/woff2/Coinbase%20Sans.woff2') format('woff2');
+      font-weight: 400; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Coinbase Sans';
+      src: url('https://raw.githubusercontent.com/rzdude/Coinbase-Fonts/master/Coinbase%20Fonts/woff2/Coinbase%20Sans%20Medium.woff2') format('woff2');
+      font-weight: 500; font-style: normal; font-display: swap;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --foreground: #0a0b0d;
+      --background: #ffffff;
+    }
+
+    body {
+      font-family: 'Coinbase Sans', -apple-system, sans-serif;
+      background: #FAFAFA;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .device {
+      width: 375px;
+      height: 812px;
+      border-radius: 32px;
+      border: 1px solid #D3D3D3;
+      overflow: hidden;
+      position: relative;
+      background: #fff;
+    }
+
+    .device-status-bar {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 44px;
+      padding: 14px 24px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--background);
+      z-index: 100;
+    }
+    .device-status-bar .time {
+      font-family: -apple-system, 'SF Pro Display', sans-serif;
+      font-size: 15px; font-weight: 700; color: var(--foreground);
+    }
+    .status-icons { display: flex; align-items: center; gap: 6px; }
+    .signal-bars { display: flex; align-items: flex-end; gap: 1.5px; height: 12px; }
+    .signal-bars .bar { width: 3px; background: var(--foreground); border-radius: 1px; }
+    .signal-bars .bar:nth-child(1) { height: 4px; }
+    .signal-bars .bar:nth-child(2) { height: 6px; }
+    .signal-bars .bar:nth-child(3) { height: 8px; }
+    .signal-bars .bar:nth-child(4) { height: 10px; }
+    .wifi-icon { width: 15.56px; height: 11px; }
+    .battery { display: flex; align-items: center; gap: 1px; position: relative; }
+    .battery-outline { width: 22px; height: 12px; }
+    .battery-fill { position: absolute; left: 2px; top: 2px; width: 14px; height: 8px; background: var(--foreground); border-radius: 1px; }
+    .battery-tip { width: 1px; height: 4px; background: var(--foreground); border-radius: 0 1px 1px 0; }
+
+    .screens {
+      position: absolute;
+      top: 44px; left: 0; right: 0; bottom: 0;
+      overflow: hidden;
+      scrollbar-width: none;
+    }
+    .screens::-webkit-scrollbar { display: none; }
+    iframe { scrollbar-width: none; }
+    iframe::-webkit-scrollbar { display: none; }
+
+    .screen {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+      background: var(--background);
+    }
+
+    .screen-restriction {
+      z-index: 2;
+      transition: transform 0.35s cubic-bezier(0.2, 0, 0, 1), opacity 0.35s cubic-bezier(0.2, 0, 0, 1);
+    }
+
+    .screen-chat {
+      z-index: 3;
+      transform: translateY(100%);
+      transition: transform 0.4s cubic-bezier(0.2, 0, 0, 1);
+    }
+
+    .screen-restriction.pushed {
+      transform: scale(0.95);
+      opacity: 0.5;
+      border-radius: 12px;
+    }
+
+    .screen-chat.active {
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+  <div class="device">
+    <div class="device-status-bar">
+      <span class="time">3:18</span>
+      <div class="status-icons">
+        <div class="signal-bars"><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div></div>
+        <svg class="wifi-icon" viewBox="0 0 15.5566 11" fill="none"><path d="M7.77832 7.99902C8.50356 7.99909 9.16609 8.25465 9.68555 8.68359L9.89941 8.87793L7.77832 11L5.65625 8.87793C6.20133 8.33285 6.94934 7.99902 7.77832 7.99902ZM7.77832 4.00098C9.7113 4.00098 11.4587 4.78153 12.7275 6.0498L11.3135 7.46387C10.4087 6.55911 9.15892 5.9991 7.77832 5.99902C6.39761 5.99902 5.14701 6.55905 4.24219 7.46387L2.8291 6.05078C4.09795 4.78212 5.84506 4.00105 7.77832 4.00098ZM7.77832 0C10.8158 3.94277e-05 13.5661 1.2311 15.5566 3.22168L14.1416 4.63574C12.513 3.00772 10.263 2.00098 7.77832 2.00098C5.29333 2.00105 3.04363 3.00831 1.41504 4.63672L0 3.22168C1.9906 1.23111 4.74079 0 7.77832 0Z" fill="#0A0B0D"/></svg>
+        <div class="battery">
+          <svg class="battery-outline" viewBox="0 0 22 12" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M19 1H3C1.89543 1 1 1.89543 1 3V9C1 10.1046 1.89543 11 3 11H19C20.1046 11 21 10.1046 21 9V3C21 1.89543 20.1046 1 19 1ZM3 0C1.34315 0 0 1.34315 0 3V9C0 10.6569 1.34315 12 3 12H19C20.6569 12 22 10.6569 22 9V3C22 1.34315 20.6569 0 19 0H3Z" fill="#0A0B0D"/></svg>
+          <div class="battery-fill"></div>
+          <div class="battery-tip"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="screens">
+      <iframe id="restriction-screen" class="screen screen-restriction" src="restriction-inner.html"></iframe>
+      <iframe id="chat-screen" class="screen screen-chat" src="chat2-inner.html"></iframe>
+    </div>
+  </div>
+
+  <script>
+    if (window.location.search.indexOf('noframe') !== -1) {
+      var device = document.querySelector('.device');
+      device.style.width = '100%';
+      device.style.height = '100vh';
+      device.style.borderRadius = '0';
+      device.style.border = 'none';
+      document.querySelector('.device-status-bar').style.display = 'none';
+      document.querySelector('.screens').style.top = '0';
+      document.body.style.background = '#fff';
+    }
+
+    var restrictionScreen = document.getElementById('restriction-screen');
+    var chatScreen = document.getElementById('chat-screen');
+
+    window.addEventListener('message', function(e) {
+      if (e.data.action === 'navigate-to-chat') {
+        restrictionScreen.classList.add('pushed');
+        chatScreen.classList.add('active');
+      }
+      if (e.data.action === 'navigate-back') {
+        restrictionScreen.classList.remove('pushed');
+        chatScreen.classList.remove('active');
+      }
+    });
+  </script>
+</body>
+</html>
