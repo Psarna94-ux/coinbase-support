@@ -97,9 +97,10 @@
 
     .screen-overlay {
       position: absolute;
-      inset: 0;
+      top: -44px;
+      left: 0; right: 0; bottom: 0;
       background: rgba(0, 0, 0, 0);
-      z-index: 2;
+      z-index: 99;
       pointer-events: none;
       transition: background 0.4s cubic-bezier(0.2, 0, 0, 1);
     }
