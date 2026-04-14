@@ -780,11 +780,11 @@
           response.innerHTML = ''
             + '<div class="chat-message">'
             + '<p>To deposit money in your local currency on Coinbase, follow these steps:</p>'
-            + '<p><strong>1. Open your portfolio</strong> — Tap the Assets tab and select your local currency wallet (e.g. INR, USD, EUR).</p>'
-            + '<p><strong>2. Tap Deposit</strong> — Select your preferred payment method such as bank transfer, UPI, or debit card.</p>'
-            + '<p><strong>3. Link your bank</strong> — If you haven\'t already, connect your bank account by entering your account details.</p>'
-            + '<p><strong>4. Enter amount</strong> — Type the amount you\'d like to deposit and review any applicable fees.</p>'
-            + '<p><strong>5. Confirm deposit</strong> — Verify the details and authorize the transaction from your bank.</p>'
+            + '<p><strong>1. Open your portfolio</strong>:Tap the Assets tab and select your local currency wallet (e.g. INR, USD, EUR).</p>'
+            + '<p><strong>2. Tap Deposit</strong>:Select your preferred payment method such as bank transfer, UPI, or debit card.</p>'
+            + '<p><strong>3. Link your bank</strong>:If you haven\'t already, connect your bank account by entering your account details.</p>'
+            + '<p><strong>4. Enter amount</strong>:Type the amount you\'d like to deposit and review any applicable fees.</p>'
+            + '<p><strong>5. Confirm deposit</strong>:Verify the details and authorize the transaction from your bank.</p>'
             + '<p>Deposits typically arrive within a few minutes for UPI/debit card, or 1–3 business days for bank transfers.</p>'
             + '</div>'
             + '<div class="chat-meta">'
@@ -817,34 +817,34 @@
       'Payment required': {
         message: '<p>Your account has an outstanding balance of <strong>$1,509.98</strong> due to a chargeback initiated by your bank on a recent deposit. When a deposit is reversed by your bank after you\'ve already traded or withdrawn the funds, the resulting negative balance must be repaid.</p>'
           + '<p>Here\'s how to resolve this:</p>'
-          + '<p><strong>1. Review the balance</strong> — Go to Settings → Account → Outstanding balance to see the full breakdown.</p>'
-          + '<p><strong>2. Make a payment</strong> — You can repay the $1,509.98 via bank transfer or debit card. Partial payments are also accepted.</p>'
-          + '<p><strong>3. Restore access</strong> — Once the balance is fully repaid, all trading, sending, and withdrawal features will be re-enabled.</p>'
+          + '<p><strong>1. Review the balance</strong>:Go to Settings → Account → Outstanding balance to see the full breakdown.</p>'
+          + '<p><strong>2. Make a payment</strong>:You can repay the $1,509.98 via bank transfer or debit card. Partial payments are also accepted.</p>'
+          + '<p><strong>3. Restore access</strong>:Once the balance is fully repaid, all trading, sending, and withdrawal features will be re-enabled.</p>'
           + '<p>Please resolve this within 30 days to avoid further account restrictions.</p>',
         action: 'Pay $1,509.98'
       },
       'Security review needed': {
         message: '<p>Your account requires a security review before purchases and deposits can be re-enabled. Here\'s how to proceed:</p>'
-          + '<p><strong>1. Open Security settings</strong> — Go to Settings → Security and look for any pending review prompts.</p>'
-          + '<p><strong>2. Verify your identity</strong> — You may be asked to re-upload your government-issued ID and take a new selfie.</p>'
-          + '<p><strong>3. Confirm recent activity</strong> — Review and confirm or deny any flagged transactions on your account.</p>'
-          + '<p><strong>4. Enable 2FA</strong> — If not already active, you\'ll need to set up two-factor authentication.</p>'
+          + '<p><strong>1. Open Security settings</strong>:Go to Settings → Security and look for any pending review prompts.</p>'
+          + '<p><strong>2. Verify your identity</strong>:You may be asked to re-upload your government-issued ID and take a new selfie.</p>'
+          + '<p><strong>3. Confirm recent activity</strong>:Review and confirm or deny any flagged transactions on your account.</p>'
+          + '<p><strong>4. Enable 2FA</strong>:If not already active, you\'ll need to set up two-factor authentication.</p>'
           + '<p>Reviews typically complete within 24–48 hours. Your funds remain safe during this process.</p>',
         action: 'Start security review'
       },
       '2 transactions pending': {
         message: '<p>You have 2 pending transactions that are being processed. Here are the details:</p>'
-          + '<p><strong>Transaction 1</strong> — $1,000 deposit via bank transfer. Expected to clear by Mar 25.</p>'
-          + '<p><strong>Transaction 2</strong> — $500 deposit via bank transfer. Expected to clear by Mar 25.</p>'
+          + '<p><strong>Transaction 1</strong>:$1,000 deposit via bank transfer. Expected to clear by Mar 25.</p>'
+          + '<p><strong>Transaction 2</strong>:$500 deposit via bank transfer. Expected to clear by Mar 25.</p>'
           + '<p>Pending transactions are held for security and compliance verification. Once cleared, you\'ll be able to cash out or send these funds.</p>'
           + '<p>If you need the funds sooner, try using a debit card for instant deposits in the future.</p>',
         action: 'View transactions'
       },
       'App feeling slow?': {
         message: '<p>We\'re currently performing scheduled maintenance which may cause slower performance. Here\'s what you should know:</p>'
-          + '<p><strong>Status</strong> — Maintenance is expected to complete within the next 2 hours.</p>'
-          + '<p><strong>Your funds are safe</strong> — All balances and assets are unaffected during maintenance.</p>'
-          + '<p><strong>What to expect</strong> — Pages may load slowly, and some transactions may be briefly delayed.</p>'
+          + '<p><strong>Status</strong>:Maintenance is expected to complete within the next 2 hours.</p>'
+          + '<p><strong>Your funds are safe</strong>:All balances and assets are unaffected during maintenance.</p>'
+          + '<p><strong>What to expect</strong>:Pages may load slowly, and some transactions may be briefly delayed.</p>'
           + '<p>You can check real-time system status at status.coinbase.com. We\'ll send a notification when maintenance is complete.</p>',
         action: 'Check system status'
       }
@@ -852,7 +852,7 @@
 
     function handleCardClick(title, desc) {
       var timeStr = getTimeStr();
-      var userText = title + ' — ' + desc;
+      var userText = title + '. ' + desc;
 
       // Create user bubble after the issues carousel
       var bubble = document.createElement('div');
