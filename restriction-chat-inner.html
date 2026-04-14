@@ -365,8 +365,20 @@
     }, 4000);
     setTimeout(function() { pills.classList.add('visible'); }, 4600);
 
-    // Handle "Why was my account restricted?" pill click
+    // Handle pill clicks
     var pillBtns = document.querySelectorAll('.pill-btn');
+
+    // "Start account review" - first pill
+    pillBtns[0].addEventListener('click', function() {
+      window.parent.postMessage({ action: 'start-review' }, '*');
+    });
+
+    // Also handle dynamically created "Start account review" pills
+    document.addEventListener('click', function(e) {
+      if (e.target.classList.contains('pill-btn') && e.target.textContent === 'Start account review') {
+        window.parent.postMessage({ action: 'start-review' }, '*');
+      }
+    });
     pillBtns[1].addEventListener('click', function() {
       // Hide pills
       pills.style.display = 'none';

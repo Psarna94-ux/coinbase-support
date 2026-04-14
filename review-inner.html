@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Account Review</title>
+  <style>
+    @font-face {
+      font-family: 'Coinbase Sans';
+      src: url('https://raw.githubusercontent.com/rzdude/Coinbase-Fonts/master/Coinbase%20Fonts/woff2/Coinbase%20Sans.woff2') format('woff2');
+      font-weight: 400; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Coinbase Sans';
+      src: url('https://raw.githubusercontent.com/rzdude/Coinbase-Fonts/master/Coinbase%20Fonts/woff2/Coinbase%20Sans%20Medium.woff2') format('woff2');
+      font-weight: 500; font-style: normal; font-display: swap;
+    }
+    @font-face {
+      font-family: 'Coinbase Display';
+      src: url('https://raw.githubusercontent.com/rzdude/Coinbase-Fonts/master/Coinbase%20Fonts/woff2/Coinbase%20Display.woff2') format('woff2');
+      font-weight: 400; font-style: normal; font-display: swap;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; scrollbar-width: none; }
+    *::-webkit-scrollbar { display: none; }
+    strong, b { font-weight: 500; }
+
+    :root {
+      --foreground: #0a0b0d;
+      --foreground-muted: #5b616e;
+      --primary: #0052ff;
+      --secondary: #eef0f3;
+      --background: #ffffff;
+      --font-sans: 'Coinbase Sans', -apple-system, sans-serif;
+      --font-display: 'Coinbase Display', -apple-system, sans-serif;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--background);
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .header {
+      height: 56px;
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .back-arrow {
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .content {
+      flex: 1;
+      padding: 8px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .title {
+      font-family: var(--font-display);
+      font-size: 24px;
+      font-weight: 400;
+      line-height: 32px;
+      color: var(--foreground);
+    }
+
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .option {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px;
+      border: 1px solid #D3D3D3;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: background 0.15s ease;
+    }
+
+    .option:hover { background: #f9f9f9; }
+    .option:active { background: var(--secondary); }
+
+    .option-text {
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 24px;
+      color: var(--foreground);
+    }
+
+    .option-chevron {
+      width: 16px;
+      height: 16px;
+      color: var(--foreground-muted);
+    }
+
+    /* Minimized AI bar */
+    .ai-bar {
+      height: 48px;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-top: 1px solid var(--secondary);
+      flex-shrink: 0;
+      cursor: pointer;
+      transition: background 0.15s ease;
+    }
+
+    .ai-bar:hover { background: #f9f9f9; }
+
+    .ai-bar-caret {
+      width: 16px;
+      height: 16px;
+    }
+
+    .ai-bar-icon {
+      width: 20px;
+      height: 20px;
+      background: var(--primary);
+      border-radius: 2px;
+    }
+
+    .ai-bar-text {
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 20px;
+      color: var(--foreground);
+    }
+
+    .ai-bar-more {
+      margin-left: auto;
+      width: 16px;
+      height: 16px;
+    }
+
+    .home-indicator {
+      height: 20px;
+      flex-shrink: 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="back-arrow">
+      <svg viewBox="0 0 16 15" fill="none">
+        <path d="M7.12 0.88L0.88 7.12C0.56 7.44 0.56 7.96 0.88 8.28L7.12 14.52C7.44 14.84 7.96 14.84 8.28 14.52C8.6 14.2 8.6 13.68 8.28 13.36L3.74 8.82H14.18C14.63 8.82 15 8.45 15 8C15 7.55 14.63 7.18 14.18 7.18H3.74L8.28 2.64C8.6 2.32 8.6 1.8 8.28 1.48C7.96 1.16 7.44 1.16 7.12 1.48V0.88Z" fill="#0a0b0d"/>
+      </svg>
+    </div>
+  </div>
+
+  <div class="content">
+    <h1 class="title">What is the intended destination for these funds?</h1>
+
+    <div class="options">
+      <div class="option">
+        <span class="option-text">Exchange</span>
+        <svg class="option-chevron" viewBox="0 0 16 16" fill="none"><path d="M6 4L10 8L6 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="option">
+        <span class="option-text">DeFi protocol</span>
+        <svg class="option-chevron" viewBox="0 0 16 16" fill="none"><path d="M6 4L10 8L6 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="option">
+        <span class="option-text">Self custody wallet</span>
+        <svg class="option-chevron" viewBox="0 0 16 16" fill="none"><path d="M6 4L10 8L6 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="option">
+        <span class="option-text">Investor/trader</span>
+        <svg class="option-chevron" viewBox="0 0 16 16" fill="none"><path d="M6 4L10 8L6 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="option" style="border: 1px solid #D3D3D3;">
+        <span class="option-text">Other</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Minimized AI agent bar -->
+  <div class="ai-bar" id="ai-bar">
+    <svg class="ai-bar-caret" viewBox="0 0 16 16" fill="none">
+      <path d="M3 10.5L8 5.5L13 10.5" stroke="#0a0b0d" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <div class="ai-bar-icon"></div>
+    <span class="ai-bar-text">AI agent</span>
+    <svg class="ai-bar-more" viewBox="0 0 4 16" fill="none">
+      <circle cx="2" cy="2" r="1.5" fill="#0a0b0d"/>
+      <circle cx="2" cy="8" r="1.5" fill="#0a0b0d"/>
+      <circle cx="2" cy="14" r="1.5" fill="#0a0b0d"/>
+    </svg>
+  </div>
+
+  <div class="home-indicator"></div>
+
+  <script>
+    document.getElementById('ai-bar').addEventListener('click', function() {
+      window.parent.postMessage({ action: 'navigate-to-chat' }, '*');
+    });
+
+    document.querySelector('.back-arrow').addEventListener('click', function() {
+      window.parent.postMessage({ action: 'navigate-back-to-restriction' }, '*');
+    });
+  </script>
+</body>
+</html>
