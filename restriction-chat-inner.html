@@ -82,14 +82,8 @@
       flex-direction: column;
       align-items: center;
       gap: 32px;
-      padding: 10px 0 80px;
+      padding: 10px 24px 80px;
       overflow-y: auto;
-    }
-
-    .body-content > *:not(.action-pills) {
-      padding-left: 24px;
-      padding-right: 24px;
-      width: 100%;
     }
 
     /* Profile */
@@ -204,16 +198,12 @@
     .action-pills {
       display: flex;
       gap: 8px;
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
+      flex-wrap: wrap;
       width: 100%;
-      padding: 0 24px 12px;
       opacity: 0;
       transform: translateY(12px);
       transition: opacity 0.4s ease, transform 0.4s ease;
     }
-    .action-pills::-webkit-scrollbar { display: none; }
     .action-pills.visible { opacity: 1; transform: translateY(0); }
 
     .pill-btn {
