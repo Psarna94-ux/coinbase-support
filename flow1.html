@@ -157,6 +157,18 @@
   </div>
 
   <script>
+    // Handle noframe mode
+    if (window.location.search.indexOf('noframe') !== -1) {
+      var device = document.querySelector('.device');
+      device.style.width = '100%';
+      device.style.height = '100vh';
+      device.style.borderRadius = '0';
+      device.style.border = 'none';
+      document.querySelector('.device-status-bar').style.display = 'none';
+      document.querySelector('.screens').style.top = '0';
+      document.body.style.background = '#fff';
+    }
+
     var helpScreen = document.getElementById('help-screen');
     var chatScreen = document.getElementById('chat-screen');
 

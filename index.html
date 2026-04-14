@@ -180,12 +180,60 @@
       width: 14px;
       height: 14px;
     }
+
+    .toggle-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .toggle-label {
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--foreground-muted);
+    }
+
+    .toggle {
+      width: 44px;
+      height: 24px;
+      border-radius: 12px;
+      background: #ccc;
+      position: relative;
+      cursor: pointer;
+      transition: background 0.2s ease;
+      border: none;
+      padding: 0;
+    }
+
+    .toggle.on {
+      background: var(--primary);
+    }
+
+    .toggle .knob {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: white;
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      transition: left 0.2s ease;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+    }
+
+    .toggle.on .knob {
+      left: 22px;
+    }
   </style>
 </head>
 <body>
   <div class="page-header">
     <h1>Coinbase Support Prototype</h1>
     <p>Choose a flow to explore the virtual assistant experience.</p>
+    <div class="toggle-row">
+      <span class="toggle-label">Device frame</span>
+      <button class="toggle on" id="frame-toggle"><div class="knob"></div></button>
+    </div>
   </div>
 
   <div class="flows">
@@ -231,5 +279,23 @@
       </div>
     </a>
   </div>
+
+  <script>
+    var toggle = document.getElementById('frame-toggle');
+    var showFrame = true;
+
+    toggle.addEventListener('click', function() {
+      showFrame = !showFrame;
+      toggle.classList.toggle('on', showFrame);
+    });
+
+    document.querySelectorAll('.flow-card').forEach(function(card) {
+      card.addEventListener('click', function(e) {
+        e.preventDefault();
+        var href = this.getAttribute('href');
+        window.location.href = href + (showFrame ? '' : '?noframe');
+      });
+    });
+  </script>
 </body>
 </html>
