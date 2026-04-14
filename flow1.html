@@ -58,24 +58,6 @@
       overflow: hidden;
       position: relative;
       background: #fff;
-      cursor: none;
-    }
-
-    .tap-cursor {
-      position: fixed;
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background: rgba(0, 0, 0, 0.15);
-      pointer-events: none;
-      z-index: 9999;
-      transform: translate(-50%, -50%);
-      display: none;
-      transition: transform 0.1s ease;
-    }
-
-    .tap-cursor.active {
-      transform: translate(-50%, -50%) scale(0.8);
     }
 
     /* Status bar — fixed at top of device, above both screens */
@@ -89,7 +71,6 @@
       align-items: center;
       background: var(--background);
       z-index: 100;
-      cursor: none;
     }
     .device-status-bar .time {
       font-family: -apple-system, 'SF Pro Display', sans-serif;
@@ -129,17 +110,6 @@
       background: var(--background);
     }
 
-    /* Invisible overlay to capture mouse events over iframes */
-    .mouse-overlay {
-      position: absolute;
-      inset: 0;
-      z-index: 50;
-      cursor: none;
-    }
-
-    .mouse-overlay.clicking {
-      pointer-events: none;
-    }
 
     .screen-help {
       z-index: 2;
@@ -179,9 +149,6 @@
       </div>
     </div>
 
-    <!-- Mouse overlay for cursor tracking -->
-    <div class="mouse-overlay" id="mouse-overlay"></div>
-
     <!-- Screens -->
     <div class="screens">
       <iframe id="help-screen" class="screen screen-help" src="help-inner.html?flow=1"></iframe>
@@ -189,36 +156,7 @@
     </div>
   </div>
 
-  <div class="tap-cursor" id="tap-cursor"></div>
-
   <script>
-    // Custom tap cursor
-    var cursor = document.getElementById('tap-cursor');
-    var overlay = document.getElementById('mouse-overlay');
-
-    overlay.addEventListener('mousemove', function(e) {
-      cursor.style.display = 'block';
-      cursor.style.left = e.clientX + 'px';
-      cursor.style.top = e.clientY + 'px';
-    });
-
-    overlay.addEventListener('mouseleave', function() {
-      cursor.style.display = 'none';
-    });
-
-    overlay.addEventListener('mousedown', function(e) {
-      cursor.classList.add('active');
-      // Briefly remove overlay so click passes through to iframe
-      overlay.style.pointerEvents = 'none';
-      setTimeout(function() {
-        overlay.style.pointerEvents = 'auto';
-      }, 300);
-    });
-
-    overlay.addEventListener('mouseup', function() {
-      cursor.classList.remove('active');
-    });
-
     var helpScreen = document.getElementById('help-screen');
     var chatScreen = document.getElementById('chat-screen');
 
