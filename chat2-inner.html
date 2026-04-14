@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=overlays-content">
+  <title>Coinbase Support</title>
+  <style>
+    @font-face {
+      font-family: 'Coinbase Sans';
+      src: url('https://raw.githubusercontent.com/rzdude/Coinbase-Fonts/master/Coinbase%20Fonts/woff2/Coinbase%20Sans.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Coinbase Sans';
+      src: url('https://raw.githubusercontent.com/rzdude/Coinbase-Fonts/master/Coinbase%20Fonts/woff2/Coinbase%20Sans%20Medium.woff2') format('woff2');
+      font-weight: 500;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Coinbase Text';
+      src: url('https://raw.githubusercontent.com/rzdude/Coinbase-Fonts/master/Coinbase%20Fonts/woff2/Coinbase%20Text.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Coinbase Text';
+      src: url('https://raw.githubusercontent.com/rzdude/Coinbase-Fonts/master/Coinbase%20Fonts/woff2/Coinbase%20Text%20Medium.woff2') format('woff2');
+      font-weight: 500;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --foreground: #0a0b0d;
+      --foreground-muted: #5b616e;
+      --primary: #0052ff;
+      --secondary: #eef0f3;
+      --green: #3cc28a;
+      --background: #ffffff;
+      --font-sans: 'Coinbase Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --font-text: 'Coinbase Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+
+    @keyframes slideInFromRight {
+      from { transform: translateX(100%); }
+      to { transform: translateX(0); }
+    }
+
+    @keyframes slideOutToRight {
+      from { transform: translateX(0); }
+      to { transform: translateX(100%); }
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--background);
+      margin: 0;
+      min-height: 100vh;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      scrollbar-width: none;
+    }
+
+    body::-webkit-scrollbar {
+      display: none;
+    }
+
+    .phone-frame {
+      width: 100%;
+      height: 100vh;
+      background: var(--background);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+
+    /* Status Bar */
+    .status-bar {
+      height: 44px;
+      padding: 14px 24px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--background);
+      flex-shrink: 0;
+    }
+
+    .status-bar .time {
+      font-family: -apple-system, 'SF Pro Display', 'Helvetica Neue', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--foreground);
+      letter-spacing: 0;
+    }
+
+    .status-icons {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .signal-bars {
+      display: flex;
+      align-items: flex-end;
+      gap: 1.5px;
+      height: 12px;
+    }
+
+    .signal-bars .bar {
+      width: 3px;
+      background: var(--foreground);
+      border-radius: 1px;
+    }
+
+    .signal-bars .bar:nth-child(1) { height: 4px; }
+    .signal-bars .bar:nth-child(2) { height: 6px; }
+    .signal-bars .bar:nth-child(3) { height: 8px; }
+    .signal-bars .bar:nth-child(4) { height: 10px; }
+
+    .wifi-icon {
+      width: 15.56px;
+      height: 11px;
+    }
+
+    .battery {
+      display: flex;
+      align-items: center;
+      gap: 1px;
+      position: relative;
+    }
+
+    .battery-outline {
+      width: 22px;
+      height: 12px;
+    }
+
+    .battery-fill {
+      position: absolute;
+      left: 2px;
+      top: 2px;
+      width: 14px;
+      height: 8px;
+      background: var(--foreground);
+      border-radius: 1px;
+    }
+
+    .battery-tip {
+      width: 1px;
+      height: 4px;
+      background: var(--foreground);
+      border-radius: 0 1px 1px 0;
+    }
+
+    /* Header */
+    .header {
+      height: 56px;
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--background);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .back-arrow {
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .back-arrow svg {
+      width: 16px;
+      height: 15px;
+    }
+
+    .more-icon {
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .more-icon svg {
+      width: 4px;
+      height: 16px;
+    }
+
+    /* Body */
+    .body-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 32px;
+      padding: 10px 24px 80px;
+      overflow-x: clip;
+      overflow-y: auto;
+    }
+
+    /* Profile Section */
+    .profile-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+    }
+
+    .avatar-wrapper {
+      position: relative;
+      width: 48px;
+      height: 48px;
+    }
+
+    .avatar-img {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .status-dot {
+      position: absolute;
+      bottom: -2px;
+      right: -2px;
+      width: 12px;
+      height: 12px;
+      background: var(--green);
+      border: 2px solid white;
+      border-radius: 50%;
+    }
+
+    .profile-info {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      width: 100%;
+    }
+
+    .profile-name {
+      font-size: 20px;
+      font-weight: 500;
+      line-height: 28px;
+      color: var(--foreground);
+    }
+
+    .profile-subtitle {
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 20px;
+      color: var(--foreground-muted);
+      text-align: center;
+    }
+
+    .profile-subtitle a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 400;
+    }
+
+    .profile-subtitle a:hover {
+      text-decoration: underline;
+    }
+
+    /* Chat Message */
+    .chat-section {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      width: 100%;
+    }
+
+    .chat-message {
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 24px;
+      color: var(--foreground);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .chat-meta {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .chat-meta-icon {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+    }
+
+    .chat-meta-icon img {
+      width: 16px;
+      height: 16px;
+      display: block;
+    }
+
+    .chat-meta-text {
+      font-family: var(--font-text);
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 16px;
+      color: var(--foreground-muted);
+    }
+
+    /* Issue Cards Carousel */
+    .issues-section {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      width: 100%;
+    }
+
+    .facing-text {
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 24px;
+      color: var(--foreground);
+    }
+
+    .issues-carousel {
+      display: flex;
+      gap: 12px;
+      overflow-x: scroll;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      width: 100vw;
+      max-width: 480px;
+      margin-left: -24px;
+      padding: 0 24px 12px;
+      align-self: flex-start;
+    }
+
+    .issues-carousel::-webkit-scrollbar {
+      display: none;
+    }
+
+    .issue-card {
+      flex-shrink: 0;
+      width: 235px;
+      padding: 12px;
+      border-radius: 16px;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      cursor: pointer;
+      min-height: 160px;
+    }
+
+    .issue-card.red { background: #fff5f6; }
+    .issue-card.blue { background: #f5f8ff; }
+
+    .issue-card-icon {
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+      margin-top: 4px;
+    }
+
+    .issue-card-body {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      flex: 1;
+      min-width: 0;
+      height: 100%;
+      justify-content: space-between;
+    }
+
+    .issue-card-info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .issue-card-title {
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 28px;
+      color: var(--foreground);
+    }
+
+    .issue-card-desc {
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 21px;
+      color: var(--foreground-muted);
+    }
+
+    .issue-card-link {
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 24px;
+      color: #105eff;
+      margin-top: auto;
+    }
+
+    /* User Bubble */
+    .user-bubble-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 8px;
+      width: 100%;
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+
+    .user-bubble-wrapper.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .user-bubble-wrapper {
+      scroll-margin-top: 72px;
+    }
+
+    .user-bubble {
+      background: #d3e1ff;
+      padding: 8px 16px;
+      border-radius: 12px 12px 0 12px;
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 24px;
+      color: var(--foreground);
+      max-width: 80%;
+    }
+
+    .user-bubble-time {
+      font-family: var(--font-sans);
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 16px;
+      color: var(--foreground-muted);
+    }
+
+    /* Action Button */
+    .action-btn-wrapper {
+      display: flex;
+      justify-content: flex-end;
+      width: 100%;
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+
+    .action-btn-wrapper.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .action-btn {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      background: var(--secondary);
+      border: none;
+      border-radius: 1000px;
+      padding: 8px 12px;
+      font-family: var(--font-sans);
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 24px;
+      color: var(--foreground);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.15s ease;
+    }
+
+    .action-btn:hover {
+      background: #e2e5e9;
+    }
+
+    .action-btn:active {
+      background: #d5d8dd;
+    }
+
+    .action-btn .arrow-icon {
+      width: 16px;
+      height: 16px;
+      transform: rotate(135deg);
+    }
+
+    /* Input Area */
+    .input-area {
+      background: var(--background);
+      padding: 12px 24px 0;
+      padding-bottom: env(safe-area-inset-bottom, 0px);
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      position: sticky;
+      bottom: 0;
+      z-index: 10;
+    }
+
+    .input-area.keyboard-open {
+      position: fixed;
+      max-width: 480px;
+      left: 50%;
+      transform: translateX(-50%);
+      transition: bottom 0.15s ease;
+    }
+
+    .input-field {
+      width: 100%;
+      height: 40px;
+      background: var(--secondary);
+      border-radius: 44px;
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      border: 2px solid transparent;
+      transition: border-color 0.15s ease;
+    }
+
+    .input-field:focus-within {
+      border-color: var(--primary);
+    }
+
+    .input-field input {
+      flex: 1;
+      border: none;
+      background: transparent;
+      font-family: var(--font-sans);
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 24px;
+      color: var(--foreground);
+      outline: none;
+    }
+
+    .input-field input::placeholder {
+      color: var(--foreground-muted);
+    }
+
+    .send-btn {
+      width: 24px;
+      height: 24px;
+      flex-shrink: 0;
+      background: none;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      display: none;
+    }
+
+    .send-btn svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .input-field:focus-within .send-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Home Indicator */
+    .home-indicator {
+      height: 32px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding-bottom: 8px;
+    }
+
+    .home-bar {
+      width: 135px;
+      height: 5px;
+      background: var(--foreground);
+      border-radius: 10px;
+    }
+
+    /* WiFi SVG styling */
+    .wifi-icon path {
+      fill: var(--foreground);
+    }
+
+    /* Loading States */
+    .profile-section,
+    .chat-section.loading,
+    .issues-section {
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+
+    .profile-section.visible,
+    .chat-section.loading.visible,
+    .issues-section.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Thinking Indicator */
+    .thinking-indicator {
+      display: none;
+      align-items: center;
+      gap: 4px;
+      padding: 0;
+      align-self: flex-start;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .thinking-indicator.visible {
+      display: flex;
+      opacity: 1;
+    }
+
+    .spinner {
+      width: 15px;
+      height: 15px;
+      flex-shrink: 0;
+      animation: spinRotate 1s linear infinite;
+    }
+
+    @keyframes spinRotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .thinking-text {
+      font-family: var(--font-sans);
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 20px;
+      color: var(--foreground-muted);
+      white-space: nowrap;
+    }
+  </style>
+</head>
+<body>
+  <div class="phone-frame">
+    <!-- Status Bar -->
+    <div class="status-bar">
+      <span class="time">3:18</span>
+      <div class="status-icons">
+        <div class="signal-bars">
+          <div class="bar"></div>
+          <div class="bar"></div>
+          <div class="bar"></div>
+          <div class="bar"></div>
+        </div>
+        <svg class="wifi-icon" viewBox="0 0 15.5566 11" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M7.77832 7.99902C8.50356 7.99909 9.16609 8.25465 9.68555 8.68359L9.89941 8.87793L7.77832 11L5.65625 8.87793C6.20133 8.33285 6.94934 7.99902 7.77832 7.99902ZM7.77832 4.00098C9.7113 4.00098 11.4587 4.78153 12.7275 6.0498L11.3135 7.46387C10.4087 6.55911 9.15892 5.9991 7.77832 5.99902C6.39761 5.99902 5.14701 6.55905 4.24219 7.46387L2.8291 6.05078C4.09795 4.78212 5.84506 4.00105 7.77832 4.00098ZM7.77832 0C10.8158 3.94277e-05 13.5661 1.2311 15.5566 3.22168L14.1416 4.63574C12.513 3.00772 10.263 2.00098 7.77832 2.00098C5.29333 2.00105 3.04363 3.00831 1.41504 4.63672L0 3.22168C1.9906 1.23111 4.74079 0 7.77832 0Z" fill="#0A0B0D"/>
+        </svg>
+        <div class="battery">
+          <svg class="battery-outline" viewBox="0 0 22 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M19 1H3C1.89543 1 1 1.89543 1 3V9C1 10.1046 1.89543 11 3 11H19C20.1046 11 21 10.1046 21 9V3C21 1.89543 20.1046 1 19 1ZM3 0C1.34315 0 0 1.34315 0 3V9C0 10.6569 1.34315 12 3 12H19C20.6569 12 22 10.6569 22 9V3C22 1.34315 20.6569 0 19 0H3Z" fill="#0A0B0D"/>
+          </svg>
+          <div class="battery-fill"></div>
+          <div class="battery-tip"></div>
+        </div>
+      </div>
+    </div>
+    <!-- Header -->
+    <div class="header">
+      <div class="back-arrow">
+        <svg viewBox="0 0 16 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M7.12 0.88L0.88 7.12C0.56 7.44 0.56 7.96 0.88 8.28L7.12 14.52C7.44 14.84 7.96 14.84 8.28 14.52C8.6 14.2 8.6 13.68 8.28 13.36L3.74 8.82H14.18C14.63 8.82 15 8.45 15 8C15 7.55 14.63 7.18 14.18 7.18H3.74L8.28 2.64C8.6 2.32 8.6 1.8 8.28 1.48C7.96 1.16 7.44 1.16 7.12 1.48V0.88Z" fill="#0a0b0d"/>
+        </svg>
+      </div>
+      <div class="more-icon">
+        <svg viewBox="0 0 4 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="2" cy="2" r="1.5" fill="#0a0b0d"/>
+          <circle cx="2" cy="8" r="1.5" fill="#0a0b0d"/>
+          <circle cx="2" cy="14" r="1.5" fill="#0a0b0d"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Body -->
+    <div class="body-content">
+      <!-- Profile -->
+      <div class="profile-section">
+        <div class="avatar-wrapper">
+          <img class="avatar-img" src="https://www.figma.com/api/mcp/asset/14f9be54-95a8-40a9-aaa4-45752b55aa81" alt="Coinbase Support Avatar" />
+          <div class="status-dot"></div>
+        </div>
+        <div class="profile-info">
+          <p class="profile-name">Coinbase Support</p>
+          <p class="profile-subtitle">Powered by artificial intelligence to resolve your queries. Might make mistakes. <a href="#">Learn more</a></p>
+        </div>
+      </div>
+
+      <!-- Thinking Indicator -->
+      <div class="thinking-indicator">
+        <svg class="spinner" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="7.5" cy="7.5" r="5.5" stroke="#5B616E" stroke-opacity="0.2" stroke-width="2.5"/>
+          <path d="M7.5 2C8.94 2 10.28 2.52 11.33 3.39C12.19 4.1 12.8 5.05 13.07 6.12" stroke="#5B616E" stroke-opacity="0.66" stroke-width="2.5" stroke-linecap="round"/>
+        </svg>
+        <span class="thinking-text">Thinking...</span>
+      </div>
+
+      <!-- Chat Message -->
+      <div class="chat-section loading">
+        <div class="chat-message">
+          <p>Hi Pranu, I'm Coinbase's virtual assistant. Can you describe your issue in a few sentences?</p>
+        </div>
+        <div class="chat-meta">
+          <div class="chat-meta-icon">
+            <img src="coinbase-logo.png" alt="Coinbase" width="16" height="16" />
+          </div>
+          <span class="chat-meta-text">Support &middot; <span class="init-time"></span></span>
+        </div>
+      </div>
+
+      <div class="issues-section">
+        <p class="facing-text">Facing any of these issues?</p>
+        <div class="issues-carousel">
+          <div class="issue-card red">
+            <svg class="issue-card-icon" width="20" height="20" viewBox="0 0 20 13.3333" fill="none"><path d="M15 1.66667C15 3.50762 16.4924 5 18.3333 5V8.33333C16.4924 8.33333 15 9.82572 15 11.6667H5C5 9.82572 3.50762 8.33333 1.66667 8.33333L1.66667 11.6667V5C3.50762 5 5 3.50762 5 1.66667H15ZM0 0V13.3333H20V0H0ZM12.5 6.66667C12.5 5.28595 11.3807 4.16667 10 4.16667C8.61929 4.16667 7.5 5.28595 7.5 6.66667C7.5 8.04738 8.61929 9.16667 10 9.16667C11.3807 9.16667 12.5 8.04738 12.5 6.66667Z" fill="#CF202F"/></svg>
+            <div class="issue-card-body">
+              <div class="issue-card-info">
+                <p class="issue-card-title">Payment required</p>
+                <p class="issue-card-desc">Coinbase restricted your account's transaction features due to suspicious activity to protect it.</p>
+              </div>
+              <span class="issue-card-link">Details</span>
+            </div>
+          </div>
+          <div class="issue-card red">
+            <svg class="issue-card-icon" width="20" height="20" viewBox="0 0 16.6667 20" fill="none"><path d="M0 7.5H2.91667V5.41667C2.91667 2.43333 5.35 0 8.33333 0C11.3167 0 13.75 2.43333 13.75 5.41667V7.5H16.6667V20H0V7.5ZM11.25 5.41667C11.25 3.80833 9.94167 2.5 8.33333 2.5C6.725 2.5 5.41667 3.80833 5.41667 5.41667V7.5H11.25V5.41667ZM8.33333 16.25C9.71405 16.25 10.8333 15.1307 10.8333 13.75C10.8333 12.3693 9.71405 11.25 8.33333 11.25C6.95262 11.25 5.83333 12.3693 5.83333 13.75C5.83333 15.1307 6.95262 16.25 8.33333 16.25Z" fill="#CF202F"/></svg>
+            <div class="issue-card-body">
+              <div class="issue-card-info">
+                <p class="issue-card-title">Security review needed</p>
+                <p class="issue-card-desc">Purchases and deposits are disabled for safety. Complete a security review to enable them.</p>
+              </div>
+              <span class="issue-card-link">Details</span>
+            </div>
+          </div>
+          <div class="issue-card blue">
+            <svg class="issue-card-icon" width="20" height="20" viewBox="0 0 20 16.6667" fill="none"><path d="M0 11.6667V9.58333H20L13.3333 16.6667L13.75 11.6667H0Z" fill="#105EFF"/><path d="M20 5V7.08333L0 7.08333L6.66667 0L6.25 5L20 5Z" fill="#105EFF"/></svg>
+            <div class="issue-card-body">
+              <div class="issue-card-info">
+                <p class="issue-card-title">2 transactions pending</p>
+                <p class="issue-card-desc">You will be able to cash out or send these funds soon. $1,500 by Mar 25</p>
+              </div>
+              <span class="issue-card-link">Details</span>
+            </div>
+          </div>
+          <div class="issue-card blue">
+            <svg class="issue-card-icon" width="20" height="20" viewBox="0 0 20 16.6667" fill="none"><path d="M0 11.6667V9.58333H20L13.3333 16.6667L13.75 11.6667H0Z" fill="#105EFF"/><path d="M20 5V7.08333L0 7.08333L6.66667 0L6.25 5L20 5Z" fill="#105EFF"/></svg>
+            <div class="issue-card-body">
+              <div class="issue-card-info">
+                <p class="issue-card-title">App feeling slow?</p>
+                <p class="issue-card-desc">Scheduled maintenance is underway; Coinbase may be slow. Your funds are safe.</p>
+              </div>
+              <span class="issue-card-link">Details</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Input -->
+    <div class="input-area">
+      <div class="input-field">
+        <input type="text" placeholder="Add a message" />
+        <button class="send-btn" type="button">
+          <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M8 14V3" stroke="#0052FF" stroke-width="2" stroke-linecap="round"/>
+            <path d="M3 7L8 2L13 7" stroke="#0052FF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+      <div class="home-indicator"></div>
+    </div>
+  </div>
+  <script>
+    document.querySelector('.back-arrow').addEventListener('click', function() {
+      window.parent.postMessage({ action: 'navigate-back' }, '*');
+    });
+
+    // Set initial timestamp
+    function getTimeStr() {
+      var now = new Date();
+      var hours = now.getHours();
+      var minutes = now.getMinutes();
+      var ampm = hours >= 12 ? 'PM' : 'AM';
+      hours = hours % 12 || 12;
+      return hours + ':' + (minutes < 10 ? '0' : '') + minutes + ' ' + ampm;
+    }
+    document.querySelector('.init-time').textContent = getTimeStr();
+
+    // Loading sequence
+    var profile = document.querySelector('.profile-section');
+    var thinking = document.querySelector('.thinking-indicator');
+    var chat = document.querySelector('.chat-section.loading');
+    var carousel = document.querySelector('.issues-section');
+
+    setTimeout(function() {
+      profile.classList.add('visible');
+    }, 500);
+
+    setTimeout(function() {
+      thinking.classList.add('visible');
+    }, 1200);
+
+    setTimeout(function() {
+      thinking.classList.remove('visible');
+      chat.classList.add('visible');
+    }, 3500);
+
+    setTimeout(function() {
+      carousel.classList.add('visible');
+    }, 4200);
+
+    // Handle message submit
+    var inputField = document.querySelector('.input-field input');
+    var inputArea = document.querySelector('.input-area');
+    var homeIndicator = document.querySelector('.home-indicator');
+    function handleSend() {
+      var text = inputField.value.trim();
+      if (!text) return;
+      inputField.value = '';
+      inputField.blur();
+
+      // Hide carousel
+      carousel.style.display = 'none';
+
+      var timeStr = getTimeStr();
+
+      // Create user bubble
+      var bubble = document.createElement('div');
+      bubble.className = 'user-bubble-wrapper';
+      bubble.innerHTML = '<div class="user-bubble">' + text + '</div><span class="user-bubble-time">' + timeStr + '</span>';
+
+      // Insert after chat-section
+      var chatSection = document.querySelector('.chat-section');
+      chatSection.parentNode.insertBefore(bubble, chatSection.nextSibling);
+
+      setTimeout(function() {
+        bubble.classList.add('visible');
+        bubble.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 50);
+
+      // Show thinking indicator
+      var thinkingReply = document.createElement('div');
+      thinkingReply.className = 'thinking-indicator';
+      thinkingReply.innerHTML = '<svg class="spinner" viewBox="0 0 15 15" fill="none"><circle cx="7.5" cy="7.5" r="5.5" stroke="#5B616E" stroke-opacity="0.2" stroke-width="2.5"/><path d="M7.5 2C8.94 2 10.28 2.52 11.33 3.39C12.19 4.1 12.8 5.05 13.07 6.12" stroke="#5B616E" stroke-opacity="0.66" stroke-width="2.5" stroke-linecap="round"/></svg><span class="thinking-text">Thinking...</span>';
+
+      setTimeout(function() {
+        bubble.parentNode.insertBefore(thinkingReply, bubble.nextSibling);
+        setTimeout(function() {
+          thinkingReply.classList.add('visible');
+          thinkingReply.scrollIntoView({ behavior: 'smooth', block: 'end' });
+        }, 50);
+      }, 800);
+
+      // Show bot response (6s delay)
+      setTimeout(function() {
+        thinkingReply.classList.remove('visible');
+        setTimeout(function() {
+          thinkingReply.remove();
+
+          var response = document.createElement('div');
+          response.className = 'chat-section user-bubble-wrapper';
+          response.style.alignItems = 'flex-start';
+          response.innerHTML = ''
+            + '<div class="chat-message">'
+            + '<p>To deposit money in your local currency on Coinbase, follow these steps:</p>'
+            + '<p><strong>1. Open your portfolio</strong> — Tap the Assets tab and select your local currency wallet (e.g. INR, USD, EUR).</p>'
+            + '<p><strong>2. Tap Deposit</strong> — Select your preferred payment method such as bank transfer, UPI, or debit card.</p>'
+            + '<p><strong>3. Link your bank</strong> — If you haven\'t already, connect your bank account by entering your account details.</p>'
+            + '<p><strong>4. Enter amount</strong> — Type the amount you\'d like to deposit and review any applicable fees.</p>'
+            + '<p><strong>5. Confirm deposit</strong> — Verify the details and authorize the transaction from your bank.</p>'
+            + '<p>Deposits typically arrive within a few minutes for UPI/debit card, or 1–3 business days for bank transfers.</p>'
+            + '</div>'
+            + '<div class="chat-meta">'
+            + '<div class="chat-meta-icon"><img src="coinbase-logo.png" alt="Coinbase" width="16" height="16" /></div>'
+            + '<span class="chat-meta-text">Support · ' + timeStr + '</span>'
+            + '</div>';
+
+          bubble.parentNode.insertBefore(response, bubble.nextSibling);
+          setTimeout(function() {
+            response.classList.add('visible');
+            response.scrollIntoView({ behavior: 'smooth', block: 'end' });
+          }, 50);
+
+          // Add action button after response
+          var actionWrapper = document.createElement('div');
+          actionWrapper.className = 'action-btn-wrapper';
+          actionWrapper.innerHTML = '<button class="action-btn">Start deposit<svg class="arrow-icon" viewBox="0 0 16 15" fill="none"><path d="M7.12 0.88L0.88 7.12C0.56 7.44 0.56 7.96 0.88 8.28L7.12 14.52C7.44 14.84 7.96 14.84 8.28 14.52C8.6 14.2 8.6 13.68 8.28 13.36L3.74 8.82H14.18C14.63 8.82 15 8.45 15 8C15 7.55 14.63 7.18 14.18 7.18H3.74L8.28 2.64C8.6 2.32 8.6 1.8 8.28 1.48C7.96 1.16 7.44 1.16 7.12 1.48V0.88Z" fill="#0a0b0d"/></svg></button>';
+          response.parentNode.insertBefore(actionWrapper, response.nextSibling);
+
+          setTimeout(function() {
+            actionWrapper.classList.add('visible');
+            actionWrapper.scrollIntoView({ behavior: 'smooth', block: 'end' });
+          }, 500);
+        }, 300);
+      }, 6000);
+    }
+
+    // Bot responses for each card
+    var cardResponses = {
+      'Payment required': {
+        message: '<p>Your account has an outstanding balance of <strong>$1,509.98</strong> due to a chargeback initiated by your bank on a recent deposit. When a deposit is reversed by your bank after you\'ve already traded or withdrawn the funds, the resulting negative balance must be repaid.</p>'
+          + '<p>Here\'s how to resolve this:</p>'
+          + '<p><strong>1. Review the balance</strong> — Go to Settings → Account → Outstanding balance to see the full breakdown.</p>'
+          + '<p><strong>2. Make a payment</strong> — You can repay the $1,509.98 via bank transfer or debit card. Partial payments are also accepted.</p>'
+          + '<p><strong>3. Restore access</strong> — Once the balance is fully repaid, all trading, sending, and withdrawal features will be re-enabled.</p>'
+          + '<p>Please resolve this within 30 days to avoid further account restrictions.</p>',
+        action: 'Pay $1,509.98'
+      },
+      'Security review needed': {
+        message: '<p>Your account requires a security review before purchases and deposits can be re-enabled. Here\'s how to proceed:</p>'
+          + '<p><strong>1. Open Security settings</strong> — Go to Settings → Security and look for any pending review prompts.</p>'
+          + '<p><strong>2. Verify your identity</strong> — You may be asked to re-upload your government-issued ID and take a new selfie.</p>'
+          + '<p><strong>3. Confirm recent activity</strong> — Review and confirm or deny any flagged transactions on your account.</p>'
+          + '<p><strong>4. Enable 2FA</strong> — If not already active, you\'ll need to set up two-factor authentication.</p>'
+          + '<p>Reviews typically complete within 24–48 hours. Your funds remain safe during this process.</p>',
+        action: 'Start security review'
+      },
+      '2 transactions pending': {
+        message: '<p>You have 2 pending transactions that are being processed. Here are the details:</p>'
+          + '<p><strong>Transaction 1</strong> — $1,000 deposit via bank transfer. Expected to clear by Mar 25.</p>'
+          + '<p><strong>Transaction 2</strong> — $500 deposit via bank transfer. Expected to clear by Mar 25.</p>'
+          + '<p>Pending transactions are held for security and compliance verification. Once cleared, you\'ll be able to cash out or send these funds.</p>'
+          + '<p>If you need the funds sooner, try using a debit card for instant deposits in the future.</p>',
+        action: 'View transactions'
+      },
+      'App feeling slow?': {
+        message: '<p>We\'re currently performing scheduled maintenance which may cause slower performance. Here\'s what you should know:</p>'
+          + '<p><strong>Status</strong> — Maintenance is expected to complete within the next 2 hours.</p>'
+          + '<p><strong>Your funds are safe</strong> — All balances and assets are unaffected during maintenance.</p>'
+          + '<p><strong>What to expect</strong> — Pages may load slowly, and some transactions may be briefly delayed.</p>'
+          + '<p>You can check real-time system status at status.coinbase.com. We\'ll send a notification when maintenance is complete.</p>',
+        action: 'Check system status'
+      }
+    };
+
+    function handleCardClick(title, desc) {
+      var timeStr = getTimeStr();
+      var userText = title + ' — ' + desc;
+
+      // Create user bubble after the issues carousel
+      var bubble = document.createElement('div');
+      bubble.className = 'user-bubble-wrapper';
+      bubble.innerHTML = '<div class="user-bubble">' + userText + '</div><span class="user-bubble-time">' + timeStr + '</span>';
+
+      var issuesSection = document.querySelector('.issues-section');
+      issuesSection.parentNode.insertBefore(bubble, issuesSection.nextSibling);
+
+      setTimeout(function() {
+        bubble.classList.add('visible');
+        bubble.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 50);
+
+      // Show thinking
+      var thinkingReply = document.createElement('div');
+      thinkingReply.className = 'thinking-indicator';
+      thinkingReply.innerHTML = '<svg class="spinner" viewBox="0 0 15 15" fill="none"><circle cx="7.5" cy="7.5" r="5.5" stroke="#5B616E" stroke-opacity="0.2" stroke-width="2.5"/><path d="M7.5 2C8.94 2 10.28 2.52 11.33 3.39C12.19 4.1 12.8 5.05 13.07 6.12" stroke="#5B616E" stroke-opacity="0.66" stroke-width="2.5" stroke-linecap="round"/></svg><span class="thinking-text">Thinking...</span>';
+
+      setTimeout(function() {
+        bubble.parentNode.insertBefore(thinkingReply, bubble.nextSibling);
+        setTimeout(function() {
+          thinkingReply.classList.add('visible');
+          thinkingReply.scrollIntoView({ behavior: 'smooth', block: 'end' });
+        }, 50);
+      }, 800);
+
+      // Show response
+      var cardData = cardResponses[title] || cardResponses['Payment required'];
+      setTimeout(function() {
+        thinkingReply.classList.remove('visible');
+        setTimeout(function() {
+          thinkingReply.remove();
+
+          var response = document.createElement('div');
+          response.className = 'chat-section user-bubble-wrapper';
+          response.style.alignItems = 'flex-start';
+          response.innerHTML = '<div class="chat-message">' + cardData.message + '</div>'
+            + '<div class="chat-meta"><div class="chat-meta-icon"><img src="coinbase-logo.png" alt="Coinbase" width="16" height="16" /></div>'
+            + '<span class="chat-meta-text">Support · ' + timeStr + '</span></div>';
+
+          bubble.parentNode.insertBefore(response, bubble.nextSibling);
+          setTimeout(function() {
+            response.classList.add('visible');
+            response.scrollIntoView({ behavior: 'smooth', block: 'end' });
+          }, 50);
+
+          var actionWrapper = document.createElement('div');
+          actionWrapper.className = 'action-btn-wrapper';
+          actionWrapper.innerHTML = '<button class="action-btn">' + cardData.action + '<svg class="arrow-icon" viewBox="0 0 16 15" fill="none"><path d="M7.12 0.88L0.88 7.12C0.56 7.44 0.56 7.96 0.88 8.28L7.12 14.52C7.44 14.84 7.96 14.84 8.28 14.52C8.6 14.2 8.6 13.68 8.28 13.36L3.74 8.82H14.18C14.63 8.82 15 8.45 15 8C15 7.55 14.63 7.18 14.18 7.18H3.74L8.28 2.64C8.6 2.32 8.6 1.8 8.28 1.48C7.96 1.16 7.44 1.16 7.12 1.48V0.88Z" fill="#0a0b0d"/></svg></button>';
+          response.parentNode.insertBefore(actionWrapper, response.nextSibling);
+
+          setTimeout(function() {
+            actionWrapper.classList.add('visible');
+            actionWrapper.scrollIntoView({ behavior: 'smooth', block: 'end' });
+          }, 500);
+        }, 300);
+      }, 6000);
+    }
+
+    // Attach click handlers to Details links
+    document.querySelectorAll('.issue-card-link').forEach(function(link) {
+      link.addEventListener('click', function() {
+        var card = this.closest('.issue-card');
+        var title = card.querySelector('.issue-card-title').textContent;
+        var desc = card.querySelector('.issue-card-desc').textContent;
+        handleCardClick(title, desc);
+      });
+    });
+
+    inputField.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') handleSend();
+    });
+
+    var sendBtn = document.querySelector('.send-btn');
+    sendBtn.addEventListener('mousedown', function(e) { e.preventDefault(); });
+    sendBtn.addEventListener('touchstart', function(e) { e.preventDefault(); handleSend(); })
+    sendBtn.addEventListener('click', handleSend);
+
+    // Move input above keyboard
+    inputField.addEventListener('focus', function() {
+      setTimeout(function() {
+        var vv = window.visualViewport;
+        var kbHeight = vv ? window.innerHeight - vv.height : 0;
+        if (kbHeight > 50) {
+          inputArea.classList.add('keyboard-open');
+          inputArea.style.bottom = kbHeight + 'px';
+          homeIndicator.style.display = 'none';
+        }
+      }, 300);
+    });
+
+    inputField.addEventListener('blur', function() {
+      inputArea.classList.remove('keyboard-open');
+      inputArea.style.bottom = '0px';
+      homeIndicator.style.display = 'flex';
+    });
+
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener('resize', function() {
+        if (document.activeElement === inputField) {
+          var kbHeight = window.innerHeight - window.visualViewport.height;
+          if (kbHeight > 50) {
+            inputArea.classList.add('keyboard-open');
+            inputArea.style.bottom = kbHeight + 'px';
+            homeIndicator.style.display = 'none';
+          } else {
+            inputArea.classList.remove('keyboard-open');
+            inputArea.style.bottom = '0px';
+            homeIndicator.style.display = 'flex';
+          }
+        }
+      });
+    }
+  </script>
+</body>
+</html>

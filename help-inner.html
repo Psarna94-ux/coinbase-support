@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Coinbase Help</title>
+  <style>
+    @font-face {
+      font-family: 'Coinbase Sans';
+      src: url('https://raw.githubusercontent.com/rzdude/Coinbase-Fonts/master/Coinbase%20Fonts/woff2/Coinbase%20Sans.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Coinbase Sans';
+      src: url('https://raw.githubusercontent.com/rzdude/Coinbase-Fonts/master/Coinbase%20Fonts/woff2/Coinbase%20Sans%20Medium.woff2') format('woff2');
+      font-weight: 500;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Coinbase Text';
+      src: url('https://raw.githubusercontent.com/rzdude/Coinbase-Fonts/master/Coinbase%20Fonts/woff2/Coinbase%20Text.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Coinbase Text';
+      src: url('https://raw.githubusercontent.com/rzdude/Coinbase-Fonts/master/Coinbase%20Fonts/woff2/Coinbase%20Text%20Medium.woff2') format('woff2');
+      font-weight: 500;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --foreground: #0a0b0d;
+      --foreground-muted: #5b616e;
+      --primary: #0052ff;
+      --secondary: #eef0f3;
+      --green: #00843e;
+      --background: #ffffff;
+      --font-sans: 'Coinbase Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --font-text: 'Coinbase Text', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+
+    @keyframes slideOutToLeft {
+      from { transform: translateX(0); opacity: 1; }
+      to { transform: translateX(-30%); opacity: 0.5; }
+    }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--background);
+      margin: 0;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    .container {
+      width: 100%;
+      height: 100vh;
+      background: var(--background);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* Status Bar */
+    .status-bar {
+      height: 44px;
+      padding: 14px 24px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--background);
+      flex-shrink: 0;
+    }
+
+    .status-bar .time {
+      font-family: -apple-system, 'SF Pro Display', 'Helvetica Neue', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--foreground);
+    }
+
+    .status-icons { display: flex; align-items: center; gap: 6px; }
+    .signal-bars { display: flex; align-items: flex-end; gap: 1.5px; height: 12px; }
+    .signal-bars .bar { width: 3px; background: var(--foreground); border-radius: 1px; }
+    .signal-bars .bar:nth-child(1) { height: 4px; }
+    .signal-bars .bar:nth-child(2) { height: 6px; }
+    .signal-bars .bar:nth-child(3) { height: 8px; }
+    .signal-bars .bar:nth-child(4) { height: 10px; }
+    .wifi-icon { width: 15.56px; height: 11px; }
+    .battery { display: flex; align-items: center; gap: 1px; position: relative; }
+    .battery-outline { width: 22px; height: 12px; }
+    .battery-fill { position: absolute; left: 2px; top: 2px; width: 14px; height: 8px; background: var(--foreground); border-radius: 1px; }
+    .battery-tip { width: 1px; height: 4px; background: var(--foreground); border-radius: 0 1px 1px 0; }
+
+    /* Header */
+    .header {
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      position: relative;
+    }
+
+    .back-arrow {
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .header-title {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--foreground);
+      line-height: 24px;
+    }
+
+    /* Hero */
+    .hero {
+      padding: 16px 24px 24px;
+    }
+
+    .hero h1 {
+      font-size: 24px;
+      font-weight: 500;
+      line-height: 32px;
+      color: var(--foreground);
+    }
+
+    /* Search */
+    .search-bar {
+      margin: 0 24px 24px;
+      background: var(--secondary);
+      border-radius: 12px;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .search-icon {
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+      color: var(--foreground-muted);
+    }
+
+    .search-bar input {
+      flex: 1;
+      border: none;
+      background: transparent;
+      font-family: var(--font-sans);
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 24px;
+      color: var(--foreground);
+      outline: none;
+    }
+
+    .search-bar input::placeholder {
+      color: var(--foreground-muted);
+    }
+
+    /* Sections */
+    .section {
+      padding: 0 24px;
+    }
+
+    .section-label {
+      font-family: var(--font-text);
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 16px;
+      color: var(--foreground-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding-bottom: 8px;
+    }
+
+    .menu-list {
+      list-style: none;
+    }
+
+    .menu-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 0;
+      border-bottom: 1px solid #f3f3f3;
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .menu-item:last-child {
+      border-bottom: none;
+    }
+
+    .menu-item-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .menu-icon {
+      width: 24px;
+      height: 24px;
+      color: var(--foreground);
+      flex-shrink: 0;
+    }
+
+    .menu-item-text {
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 24px;
+      color: var(--foreground);
+    }
+
+    .menu-badge {
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 16px;
+      color: var(--green);
+      background: #e6f4ed;
+      padding: 2px 8px;
+      border-radius: 1000px;
+      margin-left: 8px;
+    }
+
+    .chevron {
+      width: 16px;
+      height: 16px;
+      color: var(--foreground-muted);
+      flex-shrink: 0;
+    }
+
+    /* Divider */
+    .section-divider {
+      height: 24px;
+    }
+
+    /* Footer */
+    .footer {
+      margin-top: auto;
+      background: var(--secondary);
+      padding: 0 24px;
+    }
+
+    .footer-item {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 16px 0;
+      border-bottom: 1px solid #e2e5e9;
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 20px;
+      color: var(--foreground-muted);
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .footer-item:last-child {
+      border-bottom: none;
+    }
+
+    .footer-icon {
+      width: 20px;
+      height: 20px;
+      color: var(--foreground-muted);
+      flex-shrink: 0;
+    }
+
+    /* Safe area bottom padding */
+    .safe-area-bottom {
+      height: env(safe-area-inset-bottom, 16px);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Status Bar -->
+    <div class="status-bar">
+      <span class="time">3:18</span>
+      <div class="status-icons">
+        <div class="signal-bars">
+          <div class="bar"></div>
+          <div class="bar"></div>
+          <div class="bar"></div>
+          <div class="bar"></div>
+        </div>
+        <svg class="wifi-icon" viewBox="0 0 15.5566 11" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M7.77832 7.99902C8.50356 7.99909 9.16609 8.25465 9.68555 8.68359L9.89941 8.87793L7.77832 11L5.65625 8.87793C6.20133 8.33285 6.94934 7.99902 7.77832 7.99902ZM7.77832 4.00098C9.7113 4.00098 11.4587 4.78153 12.7275 6.0498L11.3135 7.46387C10.4087 6.55911 9.15892 5.9991 7.77832 5.99902C6.39761 5.99902 5.14701 6.55905 4.24219 7.46387L2.8291 6.05078C4.09795 4.78212 5.84506 4.00105 7.77832 4.00098ZM7.77832 0C10.8158 3.94277e-05 13.5661 1.2311 15.5566 3.22168L14.1416 4.63574C12.513 3.00772 10.263 2.00098 7.77832 2.00098C5.29333 2.00105 3.04363 3.00831 1.41504 4.63672L0 3.22168C1.9906 1.23111 4.74079 0 7.77832 0Z" fill="#0A0B0D"/>
+        </svg>
+        <div class="battery">
+          <svg class="battery-outline" viewBox="0 0 22 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M19 1H3C1.89543 1 1 1.89543 1 3V9C1 10.1046 1.89543 11 3 11H19C20.1046 11 21 10.1046 21 9V3C21 1.89543 20.1046 1 19 1ZM3 0C1.34315 0 0 1.34315 0 3V9C0 10.6569 1.34315 12 3 12H19C20.6569 12 22 10.6569 22 9V3C22 1.34315 20.6569 0 19 0H3Z" fill="#0A0B0D"/>
+          </svg>
+          <div class="battery-fill"></div>
+          <div class="battery-tip"></div>
+        </div>
+      </div>
+    </div>
+    <!-- Header -->
+    <div class="header">
+      <div class="back-arrow">
+        <svg viewBox="0 0 16 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M7.12 0.88L0.88 7.12C0.56 7.44 0.56 7.96 0.88 8.28L7.12 14.52C7.44 14.84 7.96 14.84 8.28 14.52C8.6 14.2 8.6 13.68 8.28 13.36L3.74 8.82H14.18C14.63 8.82 15 8.45 15 8C15 7.55 14.63 7.18 14.18 7.18H3.74L8.28 2.64C8.6 2.32 8.6 1.8 8.28 1.48C7.96 1.16 7.44 1.16 7.12 1.48V0.88Z" fill="#0a0b0d"/>
+        </svg>
+      </div>
+      <span class="header-title">Help</span>
+    </div>
+
+    <!-- Hero -->
+    <div class="hero">
+      <h1>Pranu,<br>let's resolve your issue</h1>
+    </div>
+
+    <!-- Search -->
+    <div class="search-bar">
+      <svg class="search-icon" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M9 3.5C5.96 3.5 3.5 5.96 3.5 9C3.5 12.04 5.96 14.5 9 14.5C10.34 14.5 11.56 14.01 12.5 13.2L16.15 16.85C16.44 17.14 16.91 17.14 17.2 16.85C17.49 16.56 17.49 16.09 17.2 15.8L13.55 12.15C14.36 11.21 14.85 10 14.85 8.65C14.85 5.61 12.39 3.15 9.35 3.15" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        <circle cx="9" cy="9" r="5" fill="none" stroke="currentColor" stroke-width="1.5"/>
+      </svg>
+      <input type="text" placeholder="Ask anything...">
+    </div>
+
+    <!-- Self-Serve Section -->
+    <div class="section">
+      <div class="section-label">Self-serve</div>
+      <ul class="menu-list">
+        <li>
+          <a class="menu-item" href="#">
+            <div class="menu-item-left">
+              <svg class="menu-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="12" cy="12" r="9.5" stroke="currentColor" stroke-width="1.5"/>
+                <path d="M2.5 12H21.5" stroke="currentColor" stroke-width="1.5"/>
+                <ellipse cx="12" cy="12" rx="4" ry="9.5" stroke="currentColor" stroke-width="1.5"/>
+              </svg>
+              <span class="menu-item-text">Self-serve links</span>
+              <span class="menu-badge">Most Helpful</span>
+            </div>
+            <svg class="chevron" viewBox="0 0 16 16" fill="none"><path d="M6 4L10 8L6 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </li>
+        <li>
+          <a class="menu-item" href="#">
+            <div class="menu-item-left">
+              <svg class="menu-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2L4 6V12C4 16.42 7.4 20.56 12 22C16.6 20.56 20 16.42 20 12V6L12 2Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" fill="none"/>
+                <path d="M12 8V13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                <circle cx="12" cy="16" r="0.75" fill="currentColor"/>
+              </svg>
+              <span class="menu-item-text">Support by topic</span>
+            </div>
+            <svg class="chevron" viewBox="0 0 16 16" fill="none"><path d="M6 4L10 8L6 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </li>
+        <li>
+          <a class="menu-item" href="#">
+            <div class="menu-item-left">
+              <svg class="menu-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="4" y="8" width="16" height="12" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                <path d="M8 8V6C8 3.79 9.79 2 12 2C14.21 2 16 3.79 16 6V8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                <circle cx="12" cy="14" r="1.5" fill="currentColor"/>
+              </svg>
+              <span class="menu-item-text">Lock my account</span>
+            </div>
+            <svg class="chevron" viewBox="0 0 16 16" fill="none"><path d="M6 4L10 8L6 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </li>
+        <li>
+          <a class="menu-item" href="#">
+            <div class="menu-item-left">
+              <svg class="menu-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="3" y="4" width="18" height="16" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                <path d="M3 10H21" stroke="currentColor" stroke-width="1.5"/>
+                <path d="M9 14H15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+              <span class="menu-item-text">Case history</span>
+            </div>
+            <svg class="chevron" viewBox="0 0 16 16" fill="none"><path d="M6 4L10 8L6 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <!-- Still Need Help Section -->
+    <div class="section">
+      <div class="section-label">Still need help</div>
+      <ul class="menu-list">
+        <li>
+          <a class="menu-item" id="chat-link" href="chat.html">
+            <div class="menu-item-left">
+              <svg class="menu-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M4 4H20C21.1 4 22 4.9 22 6V16C22 17.1 21.1 18 20 18H6L2 22V6C2 4.9 2.9 4 4 4Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" fill="none"/>
+                <path d="M8 10H16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                <path d="M8 13H13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+              <span class="menu-item-text">Chat with virtual assistant</span>
+            </div>
+            <svg class="chevron" viewBox="0 0 16 16" fill="none"><path d="M6 4L10 8L6 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+      <a class="footer-item" href="#">
+        <svg class="footer-icon" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="10" cy="10" r="8.5" stroke="currentColor" stroke-width="1.5" fill="none"/>
+          <path d="M2 10H18" stroke="currentColor" stroke-width="1.5"/>
+          <ellipse cx="10" cy="10" rx="3.5" ry="8.5" stroke="currentColor" stroke-width="1.5"/>
+        </svg>
+        <span>India &middot; English</span>
+      </a>
+      <a class="footer-item" href="#">
+        <svg class="footer-icon" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="3" y="3" width="14" height="14" rx="2" stroke="currentColor" stroke-width="1.5" fill="none"/>
+          <path d="M7 7H13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M7 10H13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M7 13H10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        <span>Submit a complaint</span>
+      </a>
+    </div>
+
+    <div class="safe-area-bottom"></div>
+  </div>
+  <script>
+    var params = new URLSearchParams(window.location.search);
+    var flow = params.get('flow') || '1';
+
+    document.getElementById('chat-link').addEventListener('click', function(e) {
+      e.preventDefault();
+      window.parent.postMessage({ action: 'navigate-to-chat', flow: flow }, '*');
+    });
+  </script>
+</body>
+</html>

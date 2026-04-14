@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flow 2 — Quick Help Cards</title>
+  <style>
+    @font-face {
+      font-family: 'Coinbase Sans';
+      src: url('https://raw.githubusercontent.com/rzdude/Coinbase-Fonts/master/Coinbase%20Fonts/woff2/Coinbase%20Sans.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Coinbase Sans', -apple-system, sans-serif;
+      background: #FAFAFA;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .device {
+      width: 375px;
+      height: 812px;
+      border-radius: 32px;
+      border: 1px solid #D3D3D3;
+      overflow: hidden;
+      position: relative;
+      background: #fff;
+    }
+
+    .screen {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+      transition: none;
+    }
+
+    .screen.current {
+      z-index: 2;
+    }
+
+    .screen.next {
+      z-index: 3;
+      transform: translateX(100%);
+    }
+
+    .screen.prev {
+      z-index: 1;
+      transform: translateX(-30%);
+      opacity: 0.5;
+    }
+
+    /* Slide in from right */
+    .screen.slide-in {
+      animation: slideIn 0.35s cubic-bezier(0.2, 0, 0, 1) forwards;
+      z-index: 3;
+    }
+
+    /* Slide out to left (background) */
+    .screen.slide-out-left {
+      animation: slideOutLeft 0.35s cubic-bezier(0.2, 0, 0, 1) forwards;
+      z-index: 1;
+    }
+
+    /* Slide out to right (going back) */
+    .screen.slide-out-right {
+      animation: slideOutRight 0.35s cubic-bezier(0.2, 0, 0, 1) forwards;
+      z-index: 3;
+    }
+
+    /* Slide back in from left (background restoring) */
+    .screen.slide-back {
+      animation: slideBack 0.35s cubic-bezier(0.2, 0, 0, 1) forwards;
+      z-index: 2;
+    }
+
+    @keyframes slideIn {
+      from { transform: translateX(100%); }
+      to { transform: translateX(0); }
+    }
+
+    @keyframes slideOutLeft {
+      from { transform: translateX(0); opacity: 1; }
+      to { transform: translateX(-30%); opacity: 0.5; }
+    }
+
+    @keyframes slideOutRight {
+      from { transform: translateX(0); }
+      to { transform: translateX(100%); }
+    }
+
+    @keyframes slideBack {
+      from { transform: translateX(-30%); opacity: 0.5; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <div class="device">
+    <iframe id="help-screen" class="screen current" src="help-inner.html?flow=2"></iframe>
+  </div>
+
+  <script>
+    var device = document.querySelector('.device');
+    var currentScreen = document.getElementById('help-screen');
+    var chatScreen = null;
+
+    // Listen for navigation messages from iframes
+    window.addEventListener('message', function(e) {
+      if (e.data.action === 'navigate-to-chat') {
+        var chatUrl = e.data.flow === '2' ? 'chat2-inner.html' : 'chat-inner.html';
+
+        chatScreen = document.createElement('iframe');
+        chatScreen.className = 'screen next';
+        chatScreen.src = chatUrl;
+        device.appendChild(chatScreen);
+
+        // Trigger animations
+        requestAnimationFrame(function() {
+          currentScreen.className = 'screen slide-out-left';
+          chatScreen.className = 'screen slide-in';
+        });
+      }
+
+      if (e.data.action === 'navigate-back') {
+        if (chatScreen) {
+          currentScreen.className = 'screen slide-back';
+          chatScreen.className = 'screen slide-out-right';
+
+          chatScreen.addEventListener('animationend', function() {
+            chatScreen.remove();
+            chatScreen = null;
+            currentScreen.className = 'screen current';
+          });
+        }
+      }
+    });
+  </script>
+</body>
+</html>
