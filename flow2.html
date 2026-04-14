@@ -110,7 +110,12 @@
       position: absolute;
       top: 44px; left: 0; right: 0; bottom: 0;
       overflow: hidden;
+      scrollbar-width: none;
     }
+
+    .screens::-webkit-scrollbar { display: none; }
+    iframe { scrollbar-width: none; }
+    iframe::-webkit-scrollbar { display: none; }
 
     .screen {
       position: absolute;

@@ -61,7 +61,12 @@
       min-height: 100vh;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
+      scrollbar-width: none;
     }
+
+    body::-webkit-scrollbar { display: none; }
+    *::-webkit-scrollbar { display: none; }
+    * { scrollbar-width: none; }
 
     .container {
       width: 100%;
